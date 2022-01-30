@@ -69,7 +69,35 @@
     background-color: #dcf8c6;
 }
 
-/* .chat_receiver .chat_user {
-    margin-left: auto;
-    margin-right: 17.5%;
-} */
+/*  */
+.chat_inputs {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 62px;
+    border-top: 1px solid #d3d3d3;
+}
+
+.chat_input_message {
+    flex: .9;
+}
+         
+.chat_inputs .chat_input_message form {
+    display: flex;
+    flex: 1;
+}
+
+.chat_inputs .chat_input_message form input{
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+}
+
+.chat_inputs .chat_input_message form button{
+    display: none;
+}
+
+.chat_emoji .MuiSvgIcon-root, .chat_input_audio .MuiSvgIcon-root {
+    color: #808080;
+}
