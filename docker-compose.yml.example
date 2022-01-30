@@ -1,7 +1,7 @@
 version: '3'
 services:
     web:
-        container_name: WHATSAPP_FRONT
+        container_name: CONTAINER_NAME
         stdin_open: true
         build:
             context: .
