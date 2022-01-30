@@ -26,3 +26,6 @@ yarn-error.log*
 Dockerfile.dev
 Dockerfile
 docker-compose.yml
+
+# others
+.notes
