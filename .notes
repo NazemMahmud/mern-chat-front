@@ -1,0 +1,16 @@
+# install firebase globally
+npm i -g firebase-tools
+
+# install react tailwind css
+npm install -D tailwindcss postcss autoprefixer 
+npx tailwindcss init -p
+
+# install material ui, for icons
+npm i @mui/material @mui/icons-material
+
+# pusher: real time data transfer
+npm i pusher-js
+# pusher config, channel, event all from env, later
+
+# fetch API:
+npm i axios
