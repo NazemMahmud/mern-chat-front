@@ -10,7 +10,8 @@ import AttachFile from '@mui/icons-material/AttachFile';
 import InsertEmoticon from '@mui/icons-material/InsertEmoticon';
 import MicIcon from '@mui/icons-material/Mic';
 
-function Chat() {
+function Chat(props) {
+    console.log("Props: ", props.messages);
     return (
         <div className="chat">
             {/* Top Header: avatar, details, 3 icons  */}
@@ -46,14 +47,18 @@ function Chat() {
 
             {/* Chat box  */}
             <div className="chat_box">
-                <div className="chat_message" >
-                    <p className="chat_user pl-1 mb-1" >User name</p>
-                    <p className="chat_message_body">
-                        <span className="message"> Text messages lorem ipsum dummy text </span>
-                        <span className="chat_timestamp"> {new Date().toUTCString()} </span>
-                    </p>
-                </div>
-
+                { props.messages.map((message, index) => (
+                    <div className={`chat_message ${!(index%2) && "chat_receiver"}`} >
+                        <p className="chat_user pl-1 mb-1" > {message.name}</p>
+                        <p className="chat_message_body">
+                            {/*"_id": "61f9a2e27425516198a2f93c",*/}
+                            {/*"received": false,*/}
+                            <span className="message"> {message.message} </span>
+                            <span className="chat_timestamp"> {message.timestamp} </span>
+                            {/*<span className="chat_timestamp"> {new Date().toUTCString()} </span>*/}
+                        </p>
+                    </div>
+                )) }
                 <div className="chat_message chat_receiver" >
 
                     <p className="chat_user pl-1 mb-1" >User name</p>
@@ -62,23 +67,6 @@ function Chat() {
                         <span className="chat_timestamp"> {new Date().toUTCString()} </span>
                     </p>
                 </div>
-
-                <div className="chat_message" >
-                    <p className="chat_user pl-1 mb-1" >User name</p>
-                    <p className="chat_message_body">
-                        <span className="message"> Text messages </span>
-                        <span className="chat_timestamp"> {new Date().toUTCString()} </span>
-                    </p>
-                </div>
-
-                <div className="chat_message chat_receiver" >
-                    <p className="chat_user pl-1 mb-1" >User name</p>
-                    <p className="chat_message_body">
-                        <span className="message"> Text messages </span>
-                        <span className="chat_timestamp"> {new Date().toUTCString()} </span>
-                    </p>
-                </div>
-
             </div>
 
             {/* Message Input: emoji, textbox, audio input  */}
