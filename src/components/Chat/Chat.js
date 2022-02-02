@@ -1,17 +1,34 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './Chat.css';
 
 import { Avatar, IconButton } from "@mui/material";
-import ChatIcon from '@mui/icons-material/Chat';
-import DonutLargeIcon from '@mui/icons-material/DonutLarge';
 import MoreVert from '@mui/icons-material/MoreVert';
 import SearchOutlined from '@mui/icons-material/SearchOutlined';
 import AttachFile from '@mui/icons-material/AttachFile';
 import InsertEmoticon from '@mui/icons-material/InsertEmoticon';
 import MicIcon from '@mui/icons-material/Mic';
 
+import axios from "../../config/axios.js"
+
+
 function Chat(props) {
-    console.log("Props: ", props.messages);
+    const [userInput, setUserInput] = useState('');
+    const sendMessage = async (event) => {
+        event.preventDefault();
+        await axios.post('/v1/messages.new', {
+            message: userInput,
+            name: "Johnny Depp",
+            timestamp: new Date().toUTCString(),
+            received: false,
+        });
+        setUserInput('');
+    };
+
+    const setValueFromForm = (event) => {
+      setUserInput(event.target.value);
+        console.log("userInput: ", userInput);
+    }
+
     return (
         <div className="chat">
             {/* Top Header: avatar, details, 3 icons  */}
@@ -77,9 +94,8 @@ function Chat(props) {
                 
                 <div className="chat_input_message">
                     <form>
-                        <input type="text" placeholder="Type your message" />
-                        {/* onClick={sendMessage} */}
-                        <button type="submit"> Send </button>
+                        <input value={userInput} onChange={ setValueFromForm } type="text" placeholder="Type your message" />
+                        <button onClick={sendMessage} type="submit"> Send </button>
                     </form>
                 </div>
 
