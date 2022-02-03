@@ -1,16 +1,16 @@
+import React from "react";
 import './App.css';
-import LeftSidebar from "./components/LeftSidebar/LeftSidebar";
-import Chat from "./components/Chat/Chat";
+import Chat from './containers/Chat.js';
+
 
 function App() {
-  return (
-    <div className="App">
-      <div className="main__body"> 
-        <LeftSidebar />
-        <Chat />
-      </div>
-    </div>
-  );
+    return (
+        <div className="App">
+            <div className="main__body">
+                <Chat />
+            </div>
+        </div>
+    );
 }
 
 export default App;

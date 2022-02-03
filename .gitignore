@@ -28,4 +28,4 @@ Dockerfile
 docker-compose.yml
 
 # others
-.notes
+.idea

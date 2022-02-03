@@ -1,16 +1,43 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './Chat.css';
 
 import { Avatar, IconButton } from "@mui/material";
-import ChatIcon from '@mui/icons-material/Chat';
-import DonutLargeIcon from '@mui/icons-material/DonutLarge';
 import MoreVert from '@mui/icons-material/MoreVert';
 import SearchOutlined from '@mui/icons-material/SearchOutlined';
 import AttachFile from '@mui/icons-material/AttachFile';
 import InsertEmoticon from '@mui/icons-material/InsertEmoticon';
 import MicIcon from '@mui/icons-material/Mic';
 
-function Chat() {
+import axios from "../../config/axios.js"
+
+
+function Chat(props) {
+    const [userInput, setUserInput] = useState('');
+    const sendMessage = async (event) => {
+        event.preventDefault();
+
+        const data = {
+            message: userInput,
+            name: "Johnny Depp",
+            timestamp: new Date().toUTCString(),
+            received: false,
+        }
+
+        passToChatParent(data);
+
+        await axios.post('/v1/messages/new', data);
+
+        setUserInput('');
+    };
+
+    const passToChatParent = (data) => {
+        props.sendToChatConatiner(data);
+    };
+
+    const setValueFromForm = (event) => {
+        setUserInput(event.target.value);
+    }
+
     return (
         <div className="chat">
             {/* Top Header: avatar, details, 3 icons  */}
@@ -46,39 +73,16 @@ function Chat() {
 
             {/* Chat box  */}
             <div className="chat_box">
-                <div className="chat_message" >
-                    <p className="chat_user pl-1 mb-1" >User name</p>
-                    <p className="chat_message_body">
-                        <span className="message"> Text messages lorem ipsum dummy text </span>
-                        <span className="chat_timestamp"> {new Date().toUTCString()} </span>
-                    </p>
-                </div>
-
-                <div className="chat_message chat_receiver" >
-
-                    <p className="chat_user pl-1 mb-1" >User name</p>
-                    <p className="chat_message_body">
-                        <span className="message"> Text messages </span>
-                        <span className="chat_timestamp"> {new Date().toUTCString()} </span>
-                    </p>
-                </div>
-
-                <div className="chat_message" >
-                    <p className="chat_user pl-1 mb-1" >User name</p>
-                    <p className="chat_message_body">
-                        <span className="message"> Text messages </span>
-                        <span className="chat_timestamp"> {new Date().toUTCString()} </span>
-                    </p>
-                </div>
-
-                <div className="chat_message chat_receiver" >
-                    <p className="chat_user pl-1 mb-1" >User name</p>
-                    <p className="chat_message_body">
-                        <span className="message"> Text messages </span>
-                        <span className="chat_timestamp"> {new Date().toUTCString()} </span>
-                    </p>
-                </div>
-
+                { props.messages.map((message, index) =>
+                    <div key={message._id} className={`chat_message ${!(index%2) && "chat_receiver"}`} >
+                        <p className="chat_user pl-1 mb-1" > {message.name}</p>
+                        <p className="chat_message_body">
+                            {/*"received": false,*/}
+                            <span className="message"> {message.message} </span>
+                            <span className="chat_timestamp"> {message.timestamp} </span>
+                        </p>
+                    </div>
+                ) }
             </div>
 
             {/* Message Input: emoji, textbox, audio input  */}
@@ -89,9 +93,8 @@ function Chat() {
                 
                 <div className="chat_input_message">
                     <form>
-                        <input type="text" placeholder="Type your message" />
-                        {/* onClick={sendMessage} */}
-                        <button type="submit"> Send </button>
+                        <input value={userInput} onChange={ setValueFromForm } type="text" placeholder="Type your message" />
+                        <button onClick={sendMessage} type="submit"> Send </button>
                     </form>
                 </div>
 
