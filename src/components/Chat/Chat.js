@@ -15,18 +15,27 @@ function Chat(props) {
     const [userInput, setUserInput] = useState('');
     const sendMessage = async (event) => {
         event.preventDefault();
-        await axios.post('/v1/messages.new', {
+
+        const data = {
             message: userInput,
             name: "Johnny Depp",
             timestamp: new Date().toUTCString(),
             received: false,
-        });
+        }
+
+        passToChatParent(data);
+
+        await axios.post('/v1/messages/new', data);
+
         setUserInput('');
     };
 
+    const passToChatParent = (data) => {
+        props.sendToChatConatiner(data);
+    };
+
     const setValueFromForm = (event) => {
-      setUserInput(event.target.value);
-        console.log("userInput: ", userInput);
+        setUserInput(event.target.value);
     }
 
     return (
@@ -64,26 +73,16 @@ function Chat(props) {
 
             {/* Chat box  */}
             <div className="chat_box">
-                { props.messages.map((message, index) => (
-                    <div className={`chat_message ${!(index%2) && "chat_receiver"}`} >
+                { props.messages.map((message, index) =>
+                    <div key={message._id} className={`chat_message ${!(index%2) && "chat_receiver"}`} >
                         <p className="chat_user pl-1 mb-1" > {message.name}</p>
                         <p className="chat_message_body">
-                            {/*"_id": "61f9a2e27425516198a2f93c",*/}
                             {/*"received": false,*/}
                             <span className="message"> {message.message} </span>
                             <span className="chat_timestamp"> {message.timestamp} </span>
-                            {/*<span className="chat_timestamp"> {new Date().toUTCString()} </span>*/}
                         </p>
                     </div>
-                )) }
-                <div className="chat_message chat_receiver" >
-
-                    <p className="chat_user pl-1 mb-1" >User name</p>
-                    <p className="chat_message_body">
-                        <span className="message"> Text messages </span>
-                        <span className="chat_timestamp"> {new Date().toUTCString()} </span>
-                    </p>
-                </div>
+                ) }
             </div>
 
             {/* Message Input: emoji, textbox, audio input  */}
