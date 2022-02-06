@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useReducer} from "react";
 import { makeStyles } from '@mui/styles';
 import {Avatar, Button, TextField, FormControlLabel, Checkbox, Link,
     Paper, Grid, Typography } from '@mui/material';
@@ -29,7 +29,73 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Login = () => {
-    const classes = useStyles();
+    const classes = useStyles(); // styling
+    // form validation
+    const [formInput, setFormInput] = useReducer(
+        (state, newState) => ({ ...state, ...newState }),
+        {
+            email: {
+                name: "email",
+                value: "",
+                pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+                isValid: true,
+                helperText: ""
+            },
+            password: {
+                name: "password",
+                value: "",
+            }
+        }
+    );
+    const inputKeys = Object.keys(formInput);
+
+    const formValidation = (input, inputIdentifier) => {
+        if(inputIdentifier === "email") {
+            input.isValid = !!(formInput.email.value.match(formInput.email.pattern));
+            input.helperText = (!input.isValid) ? "Invalid email address": "";
+        }
+
+        if(!input.value.length){
+            input.isValid = true;
+            input.helperText = "";
+        }
+        console.log("input: ", input);
+        setFormInput({...formInput, [inputIdentifier]: input});
+        console.log("formInput: ", formInput);
+    };
+
+    // login form: on change of an input field action
+    const handleInput = (event, inputIdentifier) => {
+        const input = formInput[inputIdentifier];
+        input.value = event.target.value;
+        setFormInput({...formInput, [inputIdentifier]: input});
+        formValidation(input, inputIdentifier);
+    };
+
+    // sign up action
+    const login = (event) => {
+        event.preventDefault();
+        const formData = {};
+        for (let loginData in formInput) {
+            console.log('login: ', loginData);
+            formData[loginData] = formInput[loginData].value;
+        }
+
+        /* setLoading(true);*/
+        // this.setState({loading: true});
+        console.log('Form data: ', formData);
+        // props.history.push("/login");
+        /* axios.post('/auth/signup', formData)
+            .then(response => {
+                console.log(response);
+                // this.setState({loading: false});
+                // this.props.history.push('/');
+            })
+            .catch(error => {
+                console.log(error);
+                // this.setState({loading: false});
+            });*/
+    };
 
     return (
         <Grid container spacing={0}
@@ -46,15 +112,19 @@ const Login = () => {
                         <Typography component="h1" variant="h5">
                             Sign In
                         </Typography>
-                        <form  noValidate>
-                            <TextField className={classes.form}
-                                variant="outlined" margin="normal" required
-                                id="email" label="Email Address" name="email" autoComplete="email" autoFocus
+                        {/*noValidate purpose */}
+                        <form noValidate onSubmit={login}>
+                            <TextField className={classes.form} variant="outlined" margin="normal" required
+                                       defaultValue={formInput.email.value} name={formInput.email.name}
+                                       id="email" label="Email Address"  autoComplete="email" autoFocus
+                                       error={!formInput.email.isValid} helperText={formInput.email.helperText}
+                                       onChange={event => handleInput(event, inputKeys[0])}
+
                             />
-                            <TextField className={classes.form}
-                                variant="outlined" margin="normal" required
-                                name="password" label="Password" type="password" id="password"
-                                autoComplete="current-password"
+                            <TextField className={classes.form} variant="outlined" margin="normal" required
+                                       name={formInput.password.name} defaultValue={formInput.password.value}
+                                       label="Password" type="password" id="password" autoComplete="current-password"
+                                       onChange={event => handleInput(event, inputKeys[1])}
                             />
                             <Grid container>
                                 <Grid item xs={6} style={{width: "50%"}}>
