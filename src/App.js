@@ -1,12 +1,23 @@
-import React from "react";
+import React, {useState} from "react";
 import { Layout } from "antd";
 import { BrowserRouter as Router, Switch } from "react-router-dom";
 import './App.css';
 import Chat from './containers/Chat.js';
 import {AuthLayout, MainLayout} from "./Layout/MainLayout";
+import SnackBar from "./components/shared/Snackbar";
 
 
 function App() {
+    const [error, setError] = useState({
+        error: false,
+        message: ''
+    });
+    const handleCallback = message  => {
+        console.log('HERE ', message);
+        setError({error: true, message })
+        console.log('error ', error);
+    }
+
     return (
         // <Layout >
         //     <Router>
@@ -16,10 +27,11 @@ function App() {
         //     </Router>
         <div className="App">
             <div className="main__body">
+                {error.error ? <SnackBar data={error} /> : ''}
                 <Router>
                     <Switch>
                         {/*true ? <MainLayout /> : <AuthLayout />*/}
-                        <AuthLayout />
+                        <AuthLayout callBack = {handleCallback}  />
                     </Switch>
                 </Router>
 

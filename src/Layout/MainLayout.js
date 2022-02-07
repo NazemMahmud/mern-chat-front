@@ -5,9 +5,9 @@ import Registration from "../Pages/Authentication/Registration";
 
 const { Content } = Layout;
 
-export const AuthLayout = () => {
+export const AuthLayout = props => {
     // const [auth] = useAuth();
-
+    console.log("Auth layout props: ", props);
     return (
         <div>
             {/*<Layout>*/}
@@ -15,7 +15,7 @@ export const AuthLayout = () => {
             {/* <Content className='main-content'>*/}
 
                     <Switch>
-                        <Route exact path="/login" component={Login} />
+                        <Route exact path="/login" render={() => (<Login {...props} />) } />
                         <Route exact path="/signup" component={Registration} />
             {/*            <Route*/}
             {/*                render={({ location }) => {*/}

@@ -1,8 +1,10 @@
-import React, {useReducer} from "react";
+import React, {useReducer, useState} from "react";
 import { makeStyles } from '@mui/styles';
 import {Avatar, Button, TextField, FormControlLabel, Checkbox, Link,
     Paper, Grid, Typography } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
+import axios from "../../config/axios";
+import {useHistory} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -19,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
     },
     form: {
         width: '100%', // Fix IE 11 issue.
-        // marginTop: theme.spacing(1),
     },
     loginSubmit: {
         // margin: theme.spacing(3, 0, 2),
@@ -28,9 +29,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Login = () => {
+const Login = (props) => {
+    let history = useHistory();
+
     const classes = useStyles(); // styling
-    // form validation
+    // form validation: https://stackoverflow.com/questions/59041341/whats-the-purpose-of-the-3rd-argument-in-usereducer
     const [formInput, setFormInput] = useReducer(
         (state, newState) => ({ ...state, ...newState }),
         {
@@ -59,9 +62,7 @@ const Login = () => {
             input.isValid = true;
             input.helperText = "";
         }
-        console.log("input: ", input);
         setFormInput({...formInput, [inputIdentifier]: input});
-        console.log("formInput: ", formInput);
     };
 
     // login form: on change of an input field action
@@ -73,28 +74,21 @@ const Login = () => {
     };
 
     // sign up action
-    const login = (event) => {
+    const login = async event => {
         event.preventDefault();
         const formData = {};
         for (let loginData in formInput) {
-            console.log('login: ', loginData);
             formData[loginData] = formInput[loginData].value;
         }
 
-        /* setLoading(true);*/
-        // this.setState({loading: true});
-        console.log('Form data: ', formData);
-        // props.history.push("/login");
-        /* axios.post('/auth/signup', formData)
+        // TODO: add a loader
+        await axios.post('/auth/login', formData)
             .then(response => {
-                console.log(response);
-                // this.setState({loading: false});
-                // this.props.history.push('/');
+                history.push("/");
             })
             .catch(error => {
-                console.log(error);
-                // this.setState({loading: false});
-            });*/
+                props.callBack(error.response.data.message);
+            });
     };
 
     return (
