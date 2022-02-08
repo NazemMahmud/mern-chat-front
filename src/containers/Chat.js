@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import Auxiliary from '../hoc/Auxiliary';
+import Auxiliary from '../components/HOC/Auxiliary';
 import LeftSidebar from "../components/LeftSidebar/LeftSidebar";
 import ChatSection from "../components/Chat/Chat";
 
