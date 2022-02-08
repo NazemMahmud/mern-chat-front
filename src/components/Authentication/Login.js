@@ -4,7 +4,7 @@ import { makeStyles } from '@mui/styles';
 import {Avatar, Button, TextField, FormControlLabel, Checkbox, Link,
     Paper, Grid, Typography } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
-import {login, registration} from "../../services/Authentication/auth.service";
+import {login} from "../../services/Authentication/auth.service";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -75,7 +75,7 @@ const Login = (props) => {
     };
 
     // sign up action
-    const login = async event => {
+    const signin = async event => {
         event.preventDefault();
         const formData = {};
         for (let loginData in formInput) {
@@ -108,7 +108,7 @@ const Login = (props) => {
                             Sign In
                         </Typography>
                         {/*noValidate purpose */}
-                        <form noValidate onSubmit={login}>
+                        <form noValidate onSubmit={signin}>
                             <TextField className={classes.form} variant="outlined" margin="normal" required
                                        defaultValue={formInput.email.value} name={formInput.email.name}
                                        id="email" label="Email Address"  autoComplete="email" autoFocus
@@ -125,8 +125,7 @@ const Login = (props) => {
                                 <Grid item xs={6} style={{width: "50%"}}>
                                     <FormControlLabel style={{paddingTop: "20px", marginLeft: "-10px", float: "left", width: "100%"}}
                                                       control={<Checkbox value="remember" color="primary" />}
-                                                      label="Remember me"
-                                    />
+                                                      label="Remember me"/>
                                 </Grid>
                                 <Grid item xs={6}>
                                     <Button className={classes.loginSubmit}
