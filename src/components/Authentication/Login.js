@@ -1,10 +1,11 @@
 import React, {useReducer, useState} from "react";
+import {useHistory} from "react-router-dom";
 import { makeStyles } from '@mui/styles';
 import {Avatar, Button, TextField, FormControlLabel, Checkbox, Link,
     Paper, Grid, Typography } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
-import axios from "../../config/axios";
-import {useHistory} from "react-router-dom";
+import {login, registration} from "../../services/Authentication/auth.service";
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -82,7 +83,7 @@ const Login = (props) => {
         }
 
         // TODO: add a loader
-        await axios.post('/auth/login', formData)
+        await login(formData)
             .then(response => {
                 history.push("/");
             })

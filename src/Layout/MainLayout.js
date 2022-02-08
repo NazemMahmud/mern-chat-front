@@ -1,13 +1,12 @@
 import { Layout } from "antd";
 import {Switch, Route} from "react-router-dom";
-import Login from "../Pages/Authentication/Login";
-import Registration from "../Pages/Authentication/Registration";
+import Login from "../components/Authentication/Login";
+import Registration from "../components/Authentication/Registration";
 
 const { Content } = Layout;
 
 export const AuthLayout = props => {
     // const [auth] = useAuth();
-    console.log("Auth layout props: ", props);
     return (
         <div>
             {/*<Layout>*/}
@@ -16,7 +15,7 @@ export const AuthLayout = props => {
 
                     <Switch>
                         <Route exact path="/login" render={() => (<Login {...props} />) } />
-                        <Route exact path="/signup" component={Registration} />
+                        <Route exact path="/signup" render={() => (<Registration {...props} />) } />
             {/*            <Route*/}
             {/*                render={({ location }) => {*/}
             {/*                    return auth.isAuthenticated ? (*/}
