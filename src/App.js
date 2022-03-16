@@ -31,7 +31,7 @@ function App() {
                 <Router>
                     <Switch>
                         {/*true ? <MainLayout /> : <AuthLayout />*/}
-                        <AuthLayout callBack = {handleCallback}  />
+                        <AuthLayout snackbarCallBack = {handleCallback}  />
                     </Switch>
                 </Router>
 

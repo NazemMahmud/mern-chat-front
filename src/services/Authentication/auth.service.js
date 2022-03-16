@@ -1,6 +1,6 @@
 import axios from "../../config/axios";
 
-export const login = (data) => {
+export const login = data => {
     return axios.post('/auth/login', data);
 }
 
