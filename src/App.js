@@ -3,7 +3,8 @@ import {connect} from "react-redux";
 import { BrowserRouter as Router, Switch } from "react-router-dom";
 import './App.css';
 import Chat from './containers/Chat.js';
-import {AuthLayout, MainLayout} from "./Layout/MainLayout";
+import MainLayout from "./Layout/MainLayout";
+import AuthLayout from "./Layout/AuthLayout";
 import SnackBar from "./components/shared/Snackbar";
 
 

@@ -58,6 +58,7 @@ const Login = ( {snackbarCallBack, loginAction, authUser}) => {
     // not on first render: https://www.codegrepper.com/code-examples/javascript/react+useeffect+not+on+first+render
     // https://stackoverflow.com/questions/53179075/with-useeffect-how-can-i-skip-applying-an-effect-upon-the-initial-render
     useEffect(() => {
+        pageRedirect();
         if (didMount.current) {
             redirectOrError();
         } else {
@@ -65,6 +66,24 @@ const Login = ( {snackbarCallBack, loginAction, authUser}) => {
         }
     }, [authUser]);
 
+    /** ******************* conditional page redirection *******************************/
+    // if logged in, then redirect to home page
+    const pageRedirect = () => {
+        if (authUser && !authUser.error) {
+            history.push("/");
+        }
+    }
+
+    const redirectOrError = () => {
+        // console.log('authUser: ', authUser);
+        if (authUser?.error) {
+            snackbarCallBack(authUser.error.errorMessage);
+        } else {
+            history.push("/");
+        }
+    }
+
+    /** ******************* form based action *******************************/
     const formValidation = (input, inputIdentifier) => {
         if(inputIdentifier === "email") {
             input.isValid = !!(formInput.email.value.match(formInput.email.pattern));
@@ -98,15 +117,6 @@ const Login = ( {snackbarCallBack, loginAction, authUser}) => {
         // https://stackoverflow.com/questions/70324867/not-able-to-post-asynchronously-in-react-redux
         await loginAction(formData);
     };
-
-    const redirectOrError = () => {
-        // console.log('authUser: ', authUser);
-        if (authUser?.error) {
-            snackbarCallBack(authUser.error.errorMessage);
-        } else {
-            history.push("/");
-        }
-    }
 
     return (
         <Grid container spacing={0}

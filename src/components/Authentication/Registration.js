@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Registration = ({snackbarCallBack, registrationState, signUpAction}) => {
+const Registration = ({snackbarCallBack, registrationState, authUser, signUpAction}) => {
     const didMount = useRef(false); // to make sure useeffect call after first render, that is after form submit
     const classes = useStyles();
     let history = useHistory();
@@ -66,7 +66,9 @@ const Registration = ({snackbarCallBack, registrationState, signUpAction}) => {
         }
     );
     const inputKeys = Object.keys(formInput);
+    
     useEffect(() => {
+        pageRedirect();
         if (didMount.current) {
             redirectOrError();
         } else {
@@ -74,9 +76,15 @@ const Registration = ({snackbarCallBack, registrationState, signUpAction}) => {
         }
     }, [registrationState]);
 
-    /**
-     * After registration form submit
-     */
+    /** ******************* conditional page redirection *******************************/
+    // if logged in, then redirect to home page
+    const pageRedirect = () => {
+        if (authUser && !authUser.error) {
+            history.push("/");
+        }
+    }
+
+    /** After registration form submit */
     const redirectOrError = () => {
         if (registrationState?.error) {
             snackbarCallBack(registrationState.error.errorMessage);
@@ -84,6 +92,8 @@ const Registration = ({snackbarCallBack, registrationState, signUpAction}) => {
             history.push("/login");
         }
     }
+
+    /** ******************* form based action *******************************/
     // password and confirm password field match?
     const passwordMatch = () => {
         const password = formInput.password.value;
@@ -197,7 +207,10 @@ const Registration = ({snackbarCallBack, registrationState, signUpAction}) => {
 }
 
 const mapStateToProps = state  => {
-    return {  registrationState: state.registrationState }
+    return {
+        registrationState: state.registrationState,
+        authUser: state.authUser,
+    }
 }
 
 const mapDispatchToProps = {
