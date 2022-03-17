@@ -111,7 +111,7 @@ const Registration = props => {
                 history.push("/login");
             })
             .catch(error => {
-                props.callBack(error.response.data.message);
+                props.snackbarCallBack(error.response.data.message);
             });
     };
 

@@ -1,4 +1,4 @@
-import React, {useReducer, useState, useEffect} from "react";
+import React, {useReducer, useState, useEffect, useRef} from "react";
 import {useHistory} from "react-router-dom";
 import {connect} from "react-redux";
 import { makeStyles } from '@mui/styles';
@@ -32,9 +32,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Login = ({snackbarCallBack, getAuthUser}) => {
+const Login = ( {snackbarCallBack, getAuthUser, authUser}) => {
+    const didMount = useRef(false);
     let history = useHistory();
-
     const classes = useStyles(); // styling
     // form validation: https://stackoverflow.com/questions/59041341/whats-the-purpose-of-the-3rd-argument-in-usereducer
     const [formInput, setFormInput] = useReducer(
@@ -54,6 +54,15 @@ const Login = ({snackbarCallBack, getAuthUser}) => {
         }
     );
     const inputKeys = Object.keys(formInput);
+    // not on first render: https://www.codegrepper.com/code-examples/javascript/react+useeffect+not+on+first+render
+    // https://stackoverflow.com/questions/53179075/with-useeffect-how-can-i-skip-applying-an-effect-upon-the-initial-render
+    useEffect(() => {
+        if (didMount.current) {
+            redirectOrError();
+        } else {
+            didMount.current = true;
+        }
+    }, [authUser]);
 
     const formValidation = (input, inputIdentifier) => {
         if(inputIdentifier === "email") {
@@ -84,18 +93,19 @@ const Login = ({snackbarCallBack, getAuthUser}) => {
             formData[loginData] = formInput[loginData].value;
         }
 
-        // TODO: add a loader: https://stackoverflow.com/questions/70324867/not-able-to-post-asynchronously-in-react-redux
-        const response = getAuthUser(formData);
-        // if success response history.push("/");
-        // else snackbarCallBack(error.response.data.message);
-        // await login(formData)
-        //     .then(response => {
-        //         history.push("/");
-        //     })
-        //     .catch(error => {
-        //         snackbarCallBack(error.response.data.message);
-        //     });
+        // TODO: add a loader
+        // https://stackoverflow.com/questions/70324867/not-able-to-post-asynchronously-in-react-redux
+        await getAuthUser(formData);
     };
+
+    const redirectOrError = () => {
+        // console.log('authUser: ', authUser);
+        if (authUser?.error) {
+            snackbarCallBack(authUser.error.errorMessage);
+        } else {
+            history.push("/");
+        }
+    }
 
     return (
         <Grid container spacing={0}
@@ -168,4 +178,4 @@ const mapDispatchToProps = {
     getAuthUser
 }
 
-export default connect(mapStateToProps) (Login);
+export default connect(mapStateToProps, mapDispatchToProps) (Login);

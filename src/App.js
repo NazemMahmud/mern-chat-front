@@ -13,9 +13,9 @@ function App() {
         message: ''
     });
     const handleCallback = message  => {
-        console.log('HERE ', message);
+        // console.log('HERE ', message);
         setError({error: true, message })
-        console.log('error ', error);
+        // console.log('error ', error);
     }
 
     return (

@@ -1,18 +1,16 @@
-import axios from "../../config/axios";
 import {login} from "../../services/Authentication/auth.service";
+import {errorActionCreator} from "../errorHandler";
 
-export const getAuthUser = (loginInfo) => async dispatch => {
-    // const response = await axios.post('/');
-    const response = await login(loginInfo);
-    //     .then(response => {
-    //         history.push("/");
-    //     })
-    //     .catch(error => {
-    //         snackbarCallBack(error.response.data.message);
-    //     });
-
-    dispatch({
-        type: 'GET_USER',
-        payload: response.data ? response.data : response.message
-    });
+export const getAuthUser = loginInfo => async dispatch => {
+    // TODO: loader dispatch later for isLoading
+    await login(loginInfo)
+        .then(response => {
+            dispatch({
+                type: 'LOGIN_SUCCESS',
+                payload: response.data
+            });
+        })
+        .catch(error => {
+            dispatch( errorActionCreator('LOGIN_ERROR', error));
+        });
 }
