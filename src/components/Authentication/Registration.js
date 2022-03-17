@@ -1,9 +1,10 @@
-import React, {useReducer} from "react";
+import React, {useReducer, useEffect, useRef} from "react";
+import {connect} from "react-redux";
 import { makeStyles } from '@mui/styles';
 import {Avatar, Button, TextField, Link, Paper, Grid, Typography } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
 import {useHistory} from "react-router-dom";
-import {registration} from "../../services/Authentication/auth.service";
+import {signUpAction} from "../../redux/actions/authAction";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -29,7 +30,8 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Registration = props => {
+const Registration = ({snackbarCallBack, registrationState, authUser, signUpAction}) => {
+    const didMount = useRef(false); // to make sure useeffect call after first render, that is after form submit
     const classes = useStyles();
     let history = useHistory();
 
@@ -64,7 +66,35 @@ const Registration = props => {
         }
     );
     const inputKeys = Object.keys(formInput);
+    
+    useEffect(() => {
+        pageRedirect();
+        if (didMount.current) {
+            redirectOrError();
+        } else {
+            didMount.current = true;
+        }
+    }, [registrationState]);
 
+    /** ******************* conditional page redirection *******************************/
+    // if logged in, then redirect to home page
+    const pageRedirect = () => {
+        if (authUser && !authUser.error) {
+            history.push("/");
+        }
+    }
+
+    /** After registration form submit */
+    const redirectOrError = () => {
+        if (registrationState?.error) {
+            snackbarCallBack(registrationState.error.errorMessage);
+        } else {
+            history.push("/login");
+        }
+    }
+
+    /** ******************* form based action *******************************/
+    // password and confirm password field match?
     const passwordMatch = () => {
         const password = formInput.password.value;
         const confirm = formInput.confirmPassword.value;
@@ -106,13 +136,7 @@ const Registration = props => {
         delete formData['confirmPassword'];
         delete formData['rememberMe'];
 
-        await registration(formData)
-            .then(response => {
-                history.push("/login");
-            })
-            .catch(error => {
-                props.callBack(error.response.data.message);
-            });
+        await signUpAction(formData);
     };
 
     return (
@@ -182,4 +206,15 @@ const Registration = props => {
     );
 }
 
-export default Registration;
+const mapStateToProps = state  => {
+    return {
+        registrationState: state.registrationState,
+        authUser: state.authUser,
+    }
+}
+
+const mapDispatchToProps = {
+    signUpAction
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Registration);

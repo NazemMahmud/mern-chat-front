@@ -1,6 +1,7 @@
 import axios from "../../config/axios";
 
-export const login = (data) => {
+export const login = data => {
+    // TODO: REMINDER: no need to receive id, it will be in token
     return axios.post('/auth/login', data);
 }
 

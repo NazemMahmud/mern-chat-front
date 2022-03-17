@@ -1,10 +1,13 @@
-import React, {useReducer, useState} from "react";
+import React, {useReducer, useEffect, useRef} from "react";
 import {useHistory} from "react-router-dom";
+import {connect} from "react-redux";
+
 import { makeStyles } from '@mui/styles';
 import {Avatar, Button, TextField, FormControlLabel, Checkbox, Link,
     Paper, Grid, Typography } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
-import {login} from "../../services/Authentication/auth.service";
+
+import {loginAction} from "../../redux/actions/authAction";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -30,9 +33,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Login = (props) => {
+const Login = ( {snackbarCallBack, loginAction, authUser}) => {
+    const didMount = useRef(false);
     let history = useHistory();
-
     const classes = useStyles(); // styling
     // form validation: https://stackoverflow.com/questions/59041341/whats-the-purpose-of-the-3rd-argument-in-usereducer
     const [formInput, setFormInput] = useReducer(
@@ -52,7 +55,35 @@ const Login = (props) => {
         }
     );
     const inputKeys = Object.keys(formInput);
+    // not on first render: https://www.codegrepper.com/code-examples/javascript/react+useeffect+not+on+first+render
+    // https://stackoverflow.com/questions/53179075/with-useeffect-how-can-i-skip-applying-an-effect-upon-the-initial-render
+    useEffect(() => {
+        pageRedirect();
+        if (didMount.current) {
+            redirectOrError();
+        } else {
+            didMount.current = true;
+        }
+    }, [authUser]);
 
+    /** ******************* conditional page redirection *******************************/
+    // if logged in, then redirect to home page
+    const pageRedirect = () => {
+        if (authUser && !authUser.error) {
+            history.push("/");
+        }
+    }
+
+    const redirectOrError = () => {
+        // console.log('authUser: ', authUser);
+        if (authUser?.error) {
+            snackbarCallBack(authUser.error.errorMessage);
+        } else {
+            history.push("/");
+        }
+    }
+
+    /** ******************* form based action *******************************/
     const formValidation = (input, inputIdentifier) => {
         if(inputIdentifier === "email") {
             input.isValid = !!(formInput.email.value.match(formInput.email.pattern));
@@ -83,13 +114,8 @@ const Login = (props) => {
         }
 
         // TODO: add a loader
-        await login(formData)
-            .then(response => {
-                history.push("/");
-            })
-            .catch(error => {
-                props.callBack(error.response.data.message);
-            });
+        // https://stackoverflow.com/questions/70324867/not-able-to-post-asynchronously-in-react-redux
+        await loginAction(formData);
     };
 
     return (
@@ -155,4 +181,12 @@ const Login = (props) => {
     );
 }
 
-export default Login;
+const mapStateToProps = state  => {
+    return { authUser: state.authUser }
+}
+
+const mapDispatchToProps = {
+    loginAction
+}
+
+export default connect(mapStateToProps, mapDispatchToProps) (Login);
