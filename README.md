@@ -24,7 +24,5 @@ Run: npm install
 
 
 ## TODO:
-- redirect to home page with data (after login) \
-- not able to redirect regi / login if logged in
-- do i need refresh token also ? i already have expiry time
-- if possible, home ui, in another branch
+- need refresh token also ? already have expiry time
+- home ui, in another branch
