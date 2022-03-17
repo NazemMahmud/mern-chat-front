@@ -1,12 +1,13 @@
-import React, {useReducer, useState, useEffect, useRef} from "react";
+import React, {useReducer, useEffect, useRef} from "react";
 import {useHistory} from "react-router-dom";
 import {connect} from "react-redux";
+
 import { makeStyles } from '@mui/styles';
 import {Avatar, Button, TextField, FormControlLabel, Checkbox, Link,
     Paper, Grid, Typography } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
-import {login} from "../../services/Authentication/auth.service";
-import {getAuthUser} from "../../redux/actions/usersAction";
+
+import {loginAction} from "../../redux/actions/authAction";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -32,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Login = ( {snackbarCallBack, getAuthUser, authUser}) => {
+const Login = ( {snackbarCallBack, loginAction, authUser}) => {
     const didMount = useRef(false);
     let history = useHistory();
     const classes = useStyles(); // styling
@@ -95,7 +96,7 @@ const Login = ( {snackbarCallBack, getAuthUser, authUser}) => {
 
         // TODO: add a loader
         // https://stackoverflow.com/questions/70324867/not-able-to-post-asynchronously-in-react-redux
-        await getAuthUser(formData);
+        await loginAction(formData);
     };
 
     const redirectOrError = () => {
@@ -175,7 +176,7 @@ const mapStateToProps = state  => {
 }
 
 const mapDispatchToProps = {
-    getAuthUser
+    loginAction
 }
 
 export default connect(mapStateToProps, mapDispatchToProps) (Login);

@@ -21,3 +21,10 @@ Run: npm install
 - Material
 - Axios
 - Pusher
+
+
+## TODO:
+- redirect to home page with data (after login) \
+- not able to redirect regi / login if logged in
+- do i need refresh token also ? i already have expiry time
+- if possible, home ui, in another branch
