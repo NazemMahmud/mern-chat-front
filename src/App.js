@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import { Layout } from "antd";
+import React, {useEffect, useState} from "react";
+import {connect} from "react-redux";
 import { BrowserRouter as Router, Switch } from "react-router-dom";
 import './App.css';
 import Chat from './containers/Chat.js';
@@ -7,15 +7,24 @@ import {AuthLayout, MainLayout} from "./Layout/MainLayout";
 import SnackBar from "./components/shared/Snackbar";
 
 
-function App() {
+function App({authUser}) {
     const [error, setError] = useState({
         error: false,
         message: ''
     });
+
+    const [authLayout, setLayout] = useState(true);
+
+    useEffect(() => {
+        if (authUser && !authUser.error) {
+            setLayout(false);
+        } else {
+            setLayout(true);
+        }
+    }, [authUser])
+    // to show snackbar error message
     const handleCallback = message  => {
-        // console.log('HERE ', message);
         setError({error: true, message })
-        // console.log('error ', error);
     }
 
     return (
@@ -30,8 +39,10 @@ function App() {
                 {error.error ? <SnackBar data={error} /> : ''}
                 <Router>
                     <Switch>
-                        {/*true ? <MainLayout /> : <AuthLayout />*/}
-                        <AuthLayout snackbarCallBack = {handleCallback}  />
+                        {
+                            authLayout ? <AuthLayout snackbarCallBack={handleCallback}/>
+                                : <MainLayout/>
+                        }
                     </Switch>
                 </Router>
 
@@ -41,5 +52,8 @@ function App() {
         // </Layout>
     );
 }
+const mapStateToProps = state  => {
+    return { authUser: state.authUser }
+}
 
-export default App;
+export default connect(mapStateToProps)(App);
