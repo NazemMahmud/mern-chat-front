@@ -5,6 +5,7 @@ import SearchOutlined from '@mui/icons-material/SearchOutlined';
 import AttachFile from '@mui/icons-material/AttachFile';
 import InsertEmoticon from '@mui/icons-material/InsertEmoticon';
 import MicIcon from '@mui/icons-material/Mic';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 import './Chat.css';
 import axios from "../../config/axios.js"
@@ -64,7 +65,8 @@ function Chat(props) {
                     {/* </div> */}
                     {/* <div className="col-auto"> */}
                     <IconButton>
-                        <MoreVert />
+                        {/*<MoreVert />*/}
+                        <LogoutIcon />
                     </IconButton>
                     {/* </div> */}
                 </div>
