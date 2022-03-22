@@ -1,6 +1,4 @@
 import React, {useState} from 'react';
-import './Chat.css';
-
 import { Avatar, IconButton } from "@mui/material";
 import MoreVert from '@mui/icons-material/MoreVert';
 import SearchOutlined from '@mui/icons-material/SearchOutlined';
@@ -8,6 +6,7 @@ import AttachFile from '@mui/icons-material/AttachFile';
 import InsertEmoticon from '@mui/icons-material/InsertEmoticon';
 import MicIcon from '@mui/icons-material/Mic';
 
+import './Chat.css';
 import axios from "../../config/axios.js"
 
 
@@ -90,7 +89,7 @@ function Chat(props) {
                 <div className="chat_emoji">
                     <InsertEmoticon />
                 </div>
-                
+
                 <div className="chat_input_message">
                     <form>
                         <input value={userInput} onChange={ setValueFromForm } type="text" placeholder="Type your message" />
