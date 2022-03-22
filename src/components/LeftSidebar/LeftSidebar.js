@@ -1,12 +1,12 @@
 import React from 'react';
-import './LeftSidebar.css';
-import ChatItem from './ChatItem/ChatItem';
-
 import { Avatar, IconButton } from "@mui/material";
 import ChatIcon from '@mui/icons-material/Chat';
 import DonutLargeIcon from '@mui/icons-material/DonutLarge';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SearchOutlined from '@mui/icons-material/SearchOutlined';
+
+import './LeftSidebar.css';
+import ChatItem from './ChatItem/ChatItem';
 
 function LeftSidebar() {
     return (
@@ -18,17 +18,17 @@ function LeftSidebar() {
                     <Avatar src="https://e7.pngegg.com/pngimages/799/987/png-clipart-computer-icons-avatar-icon-design-avatar-heroes-computer-wallpaper.png" />
                 </div>
                 <div className="sidebar_heder_icons">
-                    <div className="col-auto">
+                    <div className="">
                         <IconButton>
                             <DonutLargeIcon />
                         </IconButton>
                     </div>
-                    <div className="col-auto">
+                    <div className="">
                         <IconButton>
                             <ChatIcon />
                         </IconButton>
                     </div>
-                    <div className="col-auto">
+                    <div className="">
                         <IconButton>
                             <MoreVertIcon />
                         </IconButton>

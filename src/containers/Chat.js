@@ -1,4 +1,6 @@
 import React, {useState, useEffect} from 'react';
+import {Avatar, Button, TextField, FormControlLabel, Checkbox, Link,
+    Paper, Grid, Item } from '@mui/material';
 import Auxiliary from '../components/HOC/Auxiliary';
 import LeftSidebar from "../components/LeftSidebar/LeftSidebar";
 import ChatSection from "../components/Chat/Chat";
@@ -45,13 +47,17 @@ function Chat(props) {
     };
 
     return (
-        <Auxiliary>
+        <Grid container>
+            <Grid item xs={2}>
                 <LeftSidebar/>
+            </Grid>
+            <Grid item xs={10}>
                 <ChatSection
                     messages={messages}
                     sendToChatConatiner={updateMessageListFromInput}
                 />
-        </Auxiliary>
+            </Grid>
+        </Grid>
     )
 }
 

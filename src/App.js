@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import {connect} from "react-redux";
 import { BrowserRouter as Router, Switch } from "react-router-dom";
 import './App.css';
-import Chat from './containers/Chat.js';
 import MainLayout from "./Layout/MainLayout";
 import AuthLayout from "./Layout/AuthLayout";
 import SnackBar from "./components/shared/Snackbar";
@@ -46,8 +45,6 @@ function App({authUser}) {
                         }
                     </Switch>
                 </Router>
-
-                {/*<Chat />*/}
             </div>
         </div>
         // </Layout>

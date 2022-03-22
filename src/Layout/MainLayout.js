@@ -2,6 +2,7 @@ import { Layout } from "antd";
 import {Switch, Route, useHistory} from "react-router-dom";
 import {connect} from "react-redux";
 import {useEffect} from "react";
+import Chat from "../containers/Chat";
 
 const { Content } = Layout;
 
@@ -24,8 +25,7 @@ const MainLayout = ({authUser}) => {
     return (
         <Layout>
             <Content className="main-content">
-                <div>Hiiiii!!!!</div>
-
+                <Chat />
             </Content>
         </Layout>
     );
