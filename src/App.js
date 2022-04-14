@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from "react";
 import {connect} from "react-redux";
-import { BrowserRouter as Router, Switch } from "react-router-dom";
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import './App.css';
 import MainLayout from "./Layout/MainLayout";
 import AuthLayout from "./Layout/AuthLayout";
 import SnackBar from "./components/shared/Snackbar";
+import Login from "./components/Authentication/Login";
+import {getUserData} from "./utility/utils";
 
 
 function App({authUser}) {
@@ -16,7 +18,7 @@ function App({authUser}) {
     const [authLayout, setLayout] = useState(true);
 
     useEffect(() => {
-        if (authUser && !authUser.error) {
+        if (getUserData()) {
             setLayout(false);
         } else {
             setLayout(true);

@@ -1,6 +1,6 @@
 import React, {useReducer, useEffect, useRef} from "react";
 import {useHistory} from "react-router-dom";
-import {connect} from "react-redux";
+import {connect, useDispatch} from "react-redux";
 
 import { makeStyles } from '@mui/styles';
 import {Avatar, Button, TextField, FormControlLabel, Checkbox, Link,
@@ -8,6 +8,10 @@ import {Avatar, Button, TextField, FormControlLabel, Checkbox, Link,
 import LockIcon from '@mui/icons-material/Lock';
 
 import {loginAction} from "../../redux/actions/authAction";
+import {login} from "../../services/Authentication/auth.service";
+import {errorActionCreator} from "../../redux/errorHandler";
+import {handleLogin} from "../../redux/authentication";
+import {getUserData} from "../../utility/utils";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -35,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Login = ( {snackbarCallBack, loginAction, authUser}) => {
     const didMount = useRef(false);
+    const dispatch = useDispatch()
     let history = useHistory();
     const classes = useStyles(); // styling
     // form validation: https://stackoverflow.com/questions/59041341/whats-the-purpose-of-the-3rd-argument-in-usereducer
@@ -59,29 +64,29 @@ const Login = ( {snackbarCallBack, loginAction, authUser}) => {
     // https://stackoverflow.com/questions/53179075/with-useeffect-how-can-i-skip-applying-an-effect-upon-the-initial-render
     useEffect(() => {
         pageRedirect();
-        if (didMount.current) {
-            redirectOrError();
-        } else {
-            didMount.current = true;
-        }
-    }, [authUser]);
+    //     if (didMount.current) {
+    //         redirectOrError();
+    //     } else {
+    //         didMount.current = true;
+    //     }
+    }, []);
 
     /** ******************* conditional page redirection *******************************/
     // if logged in, then redirect to home page
     const pageRedirect = () => {
-        if (authUser && !authUser.error) {
+        if (getUserData()) {
             history.push("/");
         }
     }
 
-    const redirectOrError = () => {
-        // console.log('authUser: ', authUser);
-        if (authUser?.error) {
-            snackbarCallBack(authUser.error.errorMessage);
-        } else {
-            history.push("/");
-        }
-    }
+    // const redirectOrError = () => {
+    //     // console.log('authUser: ', authUser);
+    //     if (authUser?.error) {
+    //         snackbarCallBack(authUser.error.errorMessage);
+    //     } else {
+    //         history.push("/");
+    //     }
+    // }
 
     /** ******************* form based action *******************************/
     const formValidation = (input, inputIdentifier) => {
@@ -113,9 +118,18 @@ const Login = ( {snackbarCallBack, loginAction, authUser}) => {
             formData[loginData] = formInput[loginData].value;
         }
 
+        await login(formData)
+            .then(response => {
+                dispatch(handleLogin(response.data.data));
+                history.push("/");
+            })
+            .catch(error => {
+                // TODO: add a toaster
+                console.log('error..', error)
+            });
         // TODO: add a loader
         // https://stackoverflow.com/questions/70324867/not-able-to-post-asynchronously-in-react-redux
-        await loginAction(formData);
+        // await loginAction(formData);
     };
 
     return (
@@ -181,12 +195,14 @@ const Login = ( {snackbarCallBack, loginAction, authUser}) => {
     );
 }
 
-const mapStateToProps = state  => {
-    return { authUser: state.authUser }
-}
+export default Login
 
-const mapDispatchToProps = {
-    loginAction
-}
+// const mapStateToProps = state  => {
+//     return { authUser: state.authUser }
+// }
 
-export default connect(mapStateToProps, mapDispatchToProps) (Login);
+// const mapDispatchToProps = {
+//     loginAction
+// }
+
+// export default connect(mapStateToProps, mapDispatchToProps) (Login);

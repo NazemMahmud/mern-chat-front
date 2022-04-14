@@ -7,7 +7,7 @@ const AuthLayout = props => {
     // const [auth] = useAuth();
 
     return (
-        <div>
+        <div style={{margin: '0 auto'}}>
             {/*<Layout>*/}
             {/*<Layout style={{ minHeight: "90vh" }}>*/}
             {/* <Content className='main-content'>*/}

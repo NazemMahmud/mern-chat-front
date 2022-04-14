@@ -14,7 +14,7 @@ function LeftSidebar() {
         // no dependency, run once
         axios.get('/v1/messages/all')
             .then(res => {
-                setMessages(res.data.data);
+                // setMessages(res.data.data);
             });
     }, []);
     return (

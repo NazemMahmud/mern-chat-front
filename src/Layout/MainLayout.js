@@ -11,16 +11,16 @@ const { Content } = Layout;
 const MainLayout = ({authUser}) => {
     let history = useHistory();
 
-    useEffect(() => {
-        pageRedirect();
-    }, [authUser]);
+    // useEffect(() => {
+    //     pageRedirect();
+    // }, [authUser]);
 
     // if not logged in, then redirect to home page
-    const pageRedirect = () => {
-        if (!authUser || authUser.error) {
-            history.push("/login");
-        }
-    }
+    // const pageRedirect = () => {
+    //     if (!authUser || authUser.error) {
+    //         history.push("/login");
+    //     }
+    // }
 
     return (
         <Layout>
