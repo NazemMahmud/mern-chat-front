@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Avatar, IconButton } from "@mui/material";
 import ChatIcon from '@mui/icons-material/Chat';
 import DonutLargeIcon from '@mui/icons-material/DonutLarge';
@@ -7,8 +7,16 @@ import SearchOutlined from '@mui/icons-material/SearchOutlined';
 
 import './LeftSidebar.css';
 import ChatItem from './ChatItem/ChatItem';
+import axios from "../../config/axios";
 
 function LeftSidebar() {
+    useEffect(() => {
+        // no dependency, run once
+        axios.get('/v1/messages/all')
+            .then(res => {
+                setMessages(res.data.data);
+            });
+    }, []);
     return (
         <div className="sidebar">
             {/* Top Header buttons and avatar  */}

@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {Avatar, Button, TextField, FormControlLabel, Checkbox, Link,
     Paper, Grid, Item } from '@mui/material';
-import Auxiliary from '../components/HOC/Auxiliary';
+
 import LeftSidebar from "../components/LeftSidebar/LeftSidebar";
 import ChatSection from "../components/Chat/Chat";
 
