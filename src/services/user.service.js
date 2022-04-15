@@ -1,9 +1,5 @@
-import axios from "../config/axios";
+import {authInstance as axios} from "../config/axios";
 
-export const getUserListForAuthUser = data => {
+export const getUserListForAuthUser = async data => {
     return axios.get('/user/auth-lists');
-}
-
-export const registration = (data) => {
-    return axios.post('/auth/signup', data);
 }

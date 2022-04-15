@@ -6,7 +6,7 @@ import LeftSidebar from "../components/LeftSidebar/LeftSidebar";
 import ChatSection from "../components/Chat/Chat";
 
 import Pusher from "pusher-js";
-import axios from "../config/axios.js";
+import {instance as axios} from "../config/axios.js";
 import {pusherConfig} from "../config/config";
 
 function Chat(props) {

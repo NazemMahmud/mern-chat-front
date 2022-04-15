@@ -8,7 +8,7 @@ import MicIcon from '@mui/icons-material/Mic';
 import LogoutIcon from '@mui/icons-material/Logout';
 
 import './Chat.css';
-import axios from "../../config/axios.js"
+import {instance as axios} from "../../config/axios.js"
 
 
 function Chat(props) {
